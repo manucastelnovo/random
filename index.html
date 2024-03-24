@@ -1,33 +1,200 @@
 <html>
+
+<head>
+    <style type="text/css">
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .row {
+            height: 40px;
+        }
+
+        .wall {
+            height: 40px;
+            width: 40px;
+            background-color: blue;
+            display: inline-block;
+        }
+
+        .blank {
+            height: 40px;
+            width: 40px;
+            line-height: 0px;
+            background-color: black;
+            display: inline-block;
+        }
+
+        .sushi {
+            height: 40px;
+            width: 40px;
+            background-image: url('img/sushi.png');
+            background-color: black;
+            background-size: contain;
+            display: inline-block;
+        }
+
+        .onigiri {
+            height: 40px;
+            width: 40px;
+            background-image: url('img/onigiri.png');
+            background-color: black;
+            background-size: contain;
+            display: inline-block;
+        }
+
+        #ninjaman {
+            height: 40px;
+            width: 40px;
+            background-color: black;
+            display: inline-block;
+            background-image: url('img/ninja.gif');
+            background-size: contain;
+            position: absolute;
+        }
+
+        #bluey {
+            height: 40px;
+            width: 40px;
+            background-color: black;
+            display: inline-block;
+            background-image: url('img/bluey.gif');
+            background-size: contain;
+            position: absolute;
+        }
+
+        #pinky {
+            height: 40px;
+            width: 40px;
+            background-color: black;
+            display: inline-block;
+            background-image: url('img/pinky.gif');
+            background-size: contain;
+            position: absolute;
+        }
+
+        #pumpky {
+            height: 40px;
+            width: 40px;
+            background-color: black;
+            display: inline-block;
+            background-image: url('img/pumpky.gif');
+            background-size: contain;
+            position: absolute;
+        }
+
+        #red {
+            height: 40px;
+            width: 40px;
+            background-color: black;
+            display: inline-block;
+            background-image: url('img/red.gif');
+            background-size: contain;
+            position: absolute;
+        }
+
+        #scaredy {
+            height: 40px;
+            width: 40px;
+            background-color: black;
+            display: inline-block;
+            background-image: url('img/scaredy.png');
+            background-size: contain;
+            position: absolute;
+        }
+    </style>
+</head>
+
 <body>
-	<div id='background'>
-        <div id='character' style='position:absolute; top:100px; left:450px; background-image: url("img/down1.png"); width:59px; height:86px;'></div>
-    </div>
+    <div id="world"></div>
+    <div id="ninjaman"></div>
+    <div id="bluey"></div>
+    <div id="pinky"></div>
+    <div id="pumpky"></div>
+    <div id="red"></div>
+    <div id="scaredy"></div>
     <script type="text/javascript">
-	    var leftValue = 450, topValue = 100;
 
-    	function update(){
-    		document.getElementById("character").style.left = leftValue+"px";
-    		document.getElementById("character").style.top = topValue+"px";
-    	}
+        var world = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 2, 2, 1, 1, 0, 2, 2, 1],
+            [1, 2, 1, 3, 1, 1, 2, 1, 3, 1],
+            [1, 2, 3, 2, 2, 2, 2, 3, 2, 1],
+            [1, 2, 1, 3, 1, 1, 2, 1, 3, 1],
+            [1, 2, 3, 2, 1, 1, 2, 3, 2, 1],
+            [1, 1, 1, 2, 1, 1, 2, 1, 1, 1],
+            [1, 2, 1, 3, 1, 1, 2, 1, 3, 1],
+            [1, 2, 3, 2, 1, 1, 2, 3, 2, 1],
+            [1, 2, 1, 3, 1, 1, 2, 1, 3, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ]
 
-    	document.onkeydown = function(e){
-			console.log(leftValue,topValue)
-    		if(e.keyCode == 37 && leftValue > 0) { // LEFT
-    			leftValue = leftValue - 10;
-    		}
-    		else if (e.keyCode == 39 && leftValue < 500) { // RIGHT
-    			leftValue = leftValue + 10;    		
-    		}
-    		else if (e.keyCode == 40 && topValue < 500) { // DOWN
-				topValue = topValue + 10;
-    		}
-			else if (e.keyCode == 38 && topValue > 0){ //TOP
-				topValue = topValue -10
-			}
+        var worldDict = {
+            0: "blank",
+            1: "wall",
+            2: "sushi",
+            3: "onigiri",
+        }
 
-    		update();
-    	}
+        function worldDraw() {
+            var output = "";
+            for (var row = 0; row < world.length; row++) {
+                output += "<div class='row'>";
+                for (var column = 0; column < world[row].length; column++) {
+                    // console.log(world[row][column]);
+                    output += `<div class='${worldDict[world[row][column]]}'></div>`;
+                }
+                output += "</div>";
+            }
+
+            document.getElementById('world').innerHTML = output;
+        }
+
+        worldDraw();
+
+        var ninjaman = {
+            x: 1,
+            y: 1,
+        }
+
+        function ninjamanDraw() {
+            document.getElementById('ninjaman').style.left = ninjaman.x * 40 + "px";
+            document.getElementById('ninjaman').style.top = ninjaman.y * 40 + "px";
+        }
+
+        ninjamanDraw();
+
+
+        document.onkeydown = function (e){
+            console.log(e.keyCode)
+            if(e.keyCode == 37){
+                if(world[ninjaman.y][ninjaman.x-1] != 1){
+                    ninjaman.x--;
+                }
+            }
+            if(e.keyCode == 39){
+                if(world[ninjaman.y][ninjaman.x + 1] != 1){
+                    ninjaman.x++
+                }
+            }
+            if(e.keyCode == 40){
+                if(world[ninjaman.y + 1 ][ninjaman.x] != 1){
+                    ninjaman.y++
+                }
+            }
+            if(e.keyCode == 38){
+                if(world[ninjaman.y - 1 ][ninjaman.x] != 1){
+                    ninjaman.y--
+                }
+            }
+            world[ninjaman.y][ninjaman.x]=0;
+            ninjamanDraw()
+            worldDraw()
+        }
     </script>
+
+
 </body>
+
 </html>
