@@ -14,8 +14,12 @@
         .wall {
             height: 40px;
             width: 40px;
-            background-color: blue;
+            background-color: rgb(20, 20, 124);
             display: inline-block;
+        }
+
+        body{
+            background-color: black;
         }
 
         .blank {
@@ -103,18 +107,32 @@
             background-size: contain;
             position: absolute;
         }
+
+        .contenedor-score{
+            font-size:xx-large;
+            margin-left: 1000px;
+            color: aliceblue; 
+            display: flex;
+            align-items: center;
+        }
     </style>
 </head>
 
 <body>
     <div id="world"></div>
     <div id="ninjaman"></div>
-    <div id="bluey"></div>
-    <div id="pinky"></div>
-    <div id="pumpky"></div>
-    <div id="red"></div>
-    <div id="scaredy"></div>
+    <!-- <div id="bluey"></div> -->
+    <!-- <div id="pinky"></div> -->
+    <!-- <div id="pumpky"></div> -->
+    <!-- <div id="red"></div> -->
+    <!-- <div id="scaredy"></div> -->
+    <div class="contenedor-score">
+        <h1>Score: </h1>
+        <div id="score"></div>
+    </div>
     <script type="text/javascript">
+
+        // ------------------------------------------VARIABLES------------------------------------------------------
 
         var world = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -122,11 +140,11 @@
             [1, 2, 1, 3, 1, 1, 2, 1, 3, 1],
             [1, 2, 3, 2, 2, 2, 2, 3, 2, 1],
             [1, 2, 1, 3, 1, 1, 2, 1, 3, 1],
-            [1, 2, 3, 2, 1, 1, 2, 3, 2, 1],
+            [1, 2, 3, 2, 2, 2, 2, 3, 2, 1],
             [1, 1, 1, 2, 1, 1, 2, 1, 1, 1],
             [1, 2, 1, 3, 1, 1, 2, 1, 3, 1],
             [1, 2, 3, 2, 1, 1, 2, 3, 2, 1],
-            [1, 2, 1, 3, 1, 1, 2, 1, 3, 1],
+            [1, 2, 1, 3, 3, 3, 2, 1, 3, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ]
 
@@ -136,6 +154,16 @@
             2: "sushi",
             3: "onigiri",
         }
+
+        var ninjaman = {
+            x: 1,
+            y: 1,
+        }
+
+        var score = 0;
+
+        // ------------------------------------------ FUNCIONES -----------------------------------------------------
+
 
         function worldDraw() {
             var output = "";
@@ -151,23 +179,26 @@
             document.getElementById('world').innerHTML = output;
         }
 
-        worldDraw();
-
-        var ninjaman = {
-            x: 1,
-            y: 1,
-        }
-
         function ninjamanDraw() {
             document.getElementById('ninjaman').style.left = ninjaman.x * 40 + "px";
             document.getElementById('ninjaman').style.top = ninjaman.y * 40 + "px";
         }
 
+        function scoreDraw(point) {
+            score= score + point
+            document.getElementById('score').textContent=score;
+            console.log(score)
+        }
+
+        // ------------------------------------------- SETUP ----------------------------------------------------------
+       
+       
+        worldDraw();
         ninjamanDraw();
 
 
         document.onkeydown = function (e){
-            console.log(e.keyCode)
+            
             if(e.keyCode == 37){
                 if(world[ninjaman.y][ninjaman.x-1] != 1){
                     ninjaman.x--;
@@ -188,10 +219,18 @@
                     ninjaman.y--
                 }
             }
+            scoreDraw(world[ninjaman.y][ninjaman.x])
             world[ninjaman.y][ninjaman.x]=0;
             ninjamanDraw()
             worldDraw()
         }
+
+
+        
+
+
+
+
     </script>
 
 
